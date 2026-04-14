@@ -12,3 +12,8 @@ class UsuariosSerializer(serializers.ModelSerializer):
     class Meta:
         model = Usuarios
         fields = '__all__'
+
+class ContatosSerializerNome(serializers.ModelSerializer):
+    class Meta:
+        model = Contato
+        fields = ['nome']
