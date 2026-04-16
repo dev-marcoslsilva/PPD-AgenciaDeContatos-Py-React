@@ -1,35 +1,44 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState, useEffect } from "react";
+import api from "./services/api";
+// import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [contatos, setContatos] = useState([]);
+
+  useEffect(() => {
+    api
+      .get("contatos/")
+      .then((response) => {
+        setContatos(response.data);
+      })
+      .catch((error) => {
+        console.error("Erro ao buscar contatos:", error);
+      });
+  }, []);
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className="min-h-screen bg-gray-100 p-8">
+      <div className="max-w-2xl mx-auto bg-black">
+        <h1 className="text-3xl font-bold text-gray-800 mb-6 text-center">
+          Minha Agenda de Contatos
+        </h1>
+
+        <div className="grid gap-4">
+          {contatos.map(contato => (
+            <div key={contato.id} className="bg-white p-4 rounded-lg shadow-md border-l-4 border-blue-500">
+              <h2 className="text-xl font-semibold text-gray-700">{contato.nome}</h2>
+              <p className="text-gray-600">{contato.email}</p>
+              <p className="text-blue-600 font-medium">{contato.telefone}</p>
+            </div>
+          ))}
+          
+          {contatos.length === 0 && (
+            <p className="text-center text-gray-500">Nenhum contato encontrado.</p>
+          )}
+        </div>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    </div>
+  );
 }
 
-export default App
+export default App;
