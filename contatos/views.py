@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from rest_framework import viewsets, SearchFilter
+from rest_framework import viewsets #searchFilter
 from .models import Contato, Usuarios
 from .serializers import ContatoSerializer, UsuariosSerializer
 from rest_framework.decorators import action
@@ -13,13 +13,11 @@ class ContatoViewSet(viewsets.ModelViewSet):
     serializer_class = ContatoSerializer
         
     @action(detail=False)
-    def favoritados(self):
-        favoritos = Contato.objects.query_params.get('favoritados')
+    def favoritados(self, request):
+        queryset = Contato.objects.filter(favoritado=True)
+        serializer = self.get_serializer(queryset, many=True)
 
-        if favoritos is not None:
-            queryset = queryset.filter(favoritado=favoritos.lower() == 'true')
-
-        return queryset
+        return Response(serializer.data)
     
 
 
@@ -32,12 +30,12 @@ class ContatoViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-class FiltroNomeContato(viewsets.ModelViewSet):
-    queryset = Contato.objects.all()
-    serializer_class = ContatoSerializer
+# class FiltroNomeContato(viewsets.ModelViewSet):
+#     queryset = Contato.objects.all()
+#     serializer_class = ContatoSerializer
 
-    filter_backends = [SearchFilter]
-    search_fields = ['nome']
+#     filter_backends = [searchFilter]
+#     search_fields = ['nome']
    
         
 
