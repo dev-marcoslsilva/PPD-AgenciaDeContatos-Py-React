@@ -5,6 +5,7 @@ import "./App.css";
 function App() {
   const [contatos, setContatos] = useState([]);
   const [favoritos, setFavoritos] = useState([]);
+  const [open, setOpen] = useState(true);
 
   useEffect(() => {
     api
@@ -32,12 +33,23 @@ function App() {
     <div className="flex-column items-center justify-around min-h-screen bg-gray-100 p-8">
       <header className="bg-green-400 min-w-4xl min-h-16 flex items-center justify-center mb-8 rounded-lg shadow-md"></header>
 
+      <div>
+        <button
+          onClick={() => setOpen((prev) => !prev)}
+          className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md cursor-pointer"
+        >
+          Aqui terá um icon para ativar a sidebar
+        </button>
+      </div>
+
       <div className="flex items-center justify-center mt-4">
+        <sidebar
+          className={`bg-blue-400 min-w-64 min-h-120 rounded-lg shadow-md p-4 mr-8
+           transform transition-transform duration-500 ease-in-out
+       ${open ? "translate-x-0 opacity-100" : "-translate-x-full opacity-10"}`}
+        ></sidebar>
 
-        <sidebar className="bg-blue-400 min-w-64 min-h-120 rounded-lg shadow-md p-4 mr-8">
-
-        </sidebar>
-        <div className="max-w-2xl min-w-100 max-h-100 mx-auto bg-blue-400">
+        <div className="max-w-2xl min-w-100 max-h-100 mx-auto bg-blue-400 rounded-xl">
           <h1 className="text-3xl text-white text-center">
             Minha Agenda de Contatos
           </h1>
