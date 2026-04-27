@@ -5,7 +5,7 @@ import "./App.css";
 function App() {
   const [contatos, setContatos] = useState([]);
   const [favoritos, setFavoritos] = useState([]);
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     api
@@ -30,10 +30,10 @@ function App() {
   }, []);
 
   return (
-    <div className="flex-column items-center justify-around min-h-screen bg-gray-100 p-8">
+     <div className="flex-column items-center min-h-screen bg-gray-100 p-8"> 
       <header className="bg-green-400 min-w-4xl min-h-16 flex items-center justify-center mb-8 rounded-lg shadow-md"></header>
 
-      <div>
+      <div> 
         <button
           onClick={() => setOpen((prev) => !prev)}
           className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md cursor-pointer"
@@ -42,14 +42,24 @@ function App() {
         </button>
       </div>
 
-      <div className="flex items-center justify-center mt-4">
-        <sidebar
-          className={`bg-blue-400 min-w-64 min-h-120 rounded-lg shadow-md p-4 mr-8
-           transform transition-transform duration-500 ease-in-out
-       ${open ? "translate-x-0 opacity-100" : "-translate-x-full opacity-10"}`}
-        ></sidebar>
+      <div className={`flex items-center mt-4 ${open ? "justify-between": "justify-around"}` }>
+        <aside
+          className={`left-8 top-43 bg-blue-400 rounded-lg 
+           transform transition-all duration-500
+       ${
+         open
+           ? "min-w-64 min-h-100 shadow-md p-4 mr-8"
+           : "min-w-0 mr-0 p-0 overflow-hidden"
+       }`}
+        ></aside>
 
-        <div className="max-w-2xl min-w-100 max-h-100 mx-auto bg-blue-400 rounded-xl">
+        <div
+          className={`flex flex-col max-w-2xl min-w-100 max-h-100 mx-auto bg-blue-400 rounded-xl ${
+            open
+              ? "min-w-2xl max-h-3xl max-w-3xl justify-around"
+              : "max-w-2xl min-w-xl max-h-100 justify-around"
+          }`}
+        >
           <h1 className="text-3xl text-white text-center">
             Minha Agenda de Contatos
           </h1>
@@ -76,7 +86,13 @@ function App() {
           </div>
         </div>
 
-        <div className="max-w-2xl min-w-100 max-h-100 mx-auto bg-blue-400 rounded-xl">
+        <div
+          className={`mx-auto bg-blue-400 rounded-xl 
+          //   open
+          //     ? "max-w-2xl min-w-100 max-h-100"
+          //     : "min-w-2xl max-h-3xl max-w-3xl"
+          // }`}
+        >
           <h1 className="text-3xl text-white text-center">Favoritos</h1>
           <div className="grid gap-8">
             {favoritos.map((favoritos) => (
