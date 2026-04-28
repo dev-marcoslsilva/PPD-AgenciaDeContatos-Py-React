@@ -1,17 +1,20 @@
 import { useState, useEffect } from "react";
 import api from "./services/api";
 import "./App.css";
+import Sidebar from "./sidebar-component";
 
 function App() {
   const [contatos, setContatos] = useState([]);
   const [favoritos, setFavoritos] = useState([]);
   const [open, setOpen] = useState(false);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     api
       .get("contatos/")
       .then((response) => {
         setContatos(response.data);
+        console.log(response.data);
       })
       .catch((error) => {
         console.error("Erro ao buscar contatos:", error);
@@ -29,11 +32,23 @@ function App() {
       });
   }, []);
 
+  useEffect(() => {
+    api
+      .get("usuarios/1/")
+      .then((response) => {
+        setUser(response.data);
+      })
+      .catch((error) => {
+        console.error("Erro ao buscar o usuário: ", error);
+      });
+  }, []);
+
+  
   return (
-     <div className="flex-column items-center min-h-screen bg-gray-100 p-8"> 
+    <div className="flex-column items-center min-h-screen bg-gray-100 p-8">
       <header className="bg-green-400 min-w-4xl min-h-16 flex items-center justify-center mb-8 rounded-lg shadow-md"></header>
 
-      <div> 
+      <div>
         <button
           onClick={() => setOpen((prev) => !prev)}
           className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md cursor-pointer"
@@ -42,7 +57,11 @@ function App() {
         </button>
       </div>
 
-      <div className={`flex items-center mt-4 ${open ? "justify-between": "justify-around"}` }>
+      <div
+        className={`flex items-center mt-4 ${
+          open ? "justify-between" : "justify-around"
+        }`}
+      >
         <aside
           className={`left-8 top-43 bg-blue-400 rounded-lg 
            transform transition-all duration-500
@@ -51,7 +70,9 @@ function App() {
            ? "min-w-64 min-h-100 shadow-md p-4 mr-8"
            : "min-w-0 mr-0 p-0 overflow-hidden"
        }`}
-        ></aside>
+        >
+          <Sidebar user = {user} open={open} />
+        </aside>
 
         <div
           className={`flex flex-col max-w-2xl min-w-100 max-h-100 mx-auto bg-blue-400 rounded-xl ${
