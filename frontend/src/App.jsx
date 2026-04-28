@@ -62,17 +62,8 @@ function App() {
           open ? "justify-between" : "justify-around"
         }`}
       >
-        <aside
-          className={`left-8 top-43 bg-blue-400 rounded-lg 
-           transform transition-all duration-500
-       ${
-         open
-           ? "min-w-64 min-h-100 shadow-md p-4 mr-8"
-           : "min-w-0 mr-0 p-0 overflow-hidden"
-       }`}
-        >
-          <Sidebar user = {user} open={open} />
-        </aside>
+        
+        <Sidebar user={user} open={open}/>
 
         <div
           className={`flex flex-col max-w-2xl min-w-100 max-h-100 mx-auto bg-blue-400 rounded-xl ${
