@@ -1,11 +1,35 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function Sidebar({ user, open }) {
   const [isEditMode, toggleEditMode] = useState(false);
-  const [nome, setNome] = useState(user?.nome?.split(" ")[0] || "Usuário");
+  const [nome, setNome] = useState();
+  const [telefone, setTelefone] = useState();
 
-  const [telefone, setTelefone] = useState(user?.telefone);
-  console.log(telefone);
+  function aplicarMudancas(updatedUser) {
+    toggleEditMode(false);
+
+    setTelefone(updatedUser.telefone);
+    setNome(updatedUser.nome);
+  }
+
+  const updatedDataUser = {
+    nome: null,
+    telefone: null,
+  };
+
+  function data(nome, telefone) {
+    updatedDataUser.nome = nome;
+    updatedDataUser.telefone = telefone;
+
+    aplicarMudancas(updatedDataUser);
+  }
+
+  useEffect(() => {
+    if (user) {
+      setNome(user.nome.split(" ")[0] || "Usuário");
+      setTelefone(user.telefone);
+    }
+  }, [user]);
 
   const raw = user?.aniversario.split(" ");
   const aniversario = new Date(raw).toLocaleDateString("pt-BR");
@@ -86,7 +110,7 @@ function Sidebar({ user, open }) {
           </div>
           <div name="divBotoes" className="flex justify-between mt-4">
             <button onClick={() => toggleEditMode(!isEditMode)}>Cancel</button>
-            <button>Apply</button>
+            <button onClick={() => data(nome, telefone)}>Apply</button>
           </div>
         </div>
       </div>
